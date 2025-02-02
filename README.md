@@ -46,8 +46,8 @@ brew install openssl
 首先，克隆此项目到本地：
 
 ```bash
-git clone <仓库链接>
-cd <项目目录>
+git clone https://github.com/OutlinedArc217/android-attestation-keybox-generator
+cd android-attestation-keybox-generator
 ```
 
 ### 2. 执行生成脚本
