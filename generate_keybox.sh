@@ -1,6 +1,7 @@
 #!/bin/bash
 
-DEVICE_ID="MzOS-DA916B06E13FCE1A"
+DEVICE_ID="Device-$(openssl rand -hex 8)"
+TITLE="TEE"
 
 CA_KEY="ca.key"
 CA_CRT="ca.crt"
@@ -11,11 +12,11 @@ KEYBOX_XML="keybox.xml"
 
 # 生成 CA 私钥和自签名证书（有效期 10 年）
 openssl genpkey -algorithm ec -pkeyopt ec_paramgen_curve:P-256 -out $CA_KEY
-openssl req -key $CA_KEY -new -x509 -days 3650 -subj "/CN=My Root CA" -out $CA_CRT
+openssl req -key $CA_KEY -new -x509 -days 3650 -subj "/CN=My Root CA/title=$TITLE" -out $CA_CRT
 
 # 生成设备私钥和 CSR（证书签名请求）
 openssl genpkey -algorithm ec -pkeyopt ec_paramgen_curve:P-256 -out $DEVICE_KEY
-openssl req -new -key $DEVICE_KEY -subj "/CN=My Device" -out $DEVICE_CSR
+openssl req -new -key $DEVICE_KEY -subj "/CN=My Device/title=$TITLE" -out $DEVICE_CSR
 
 # 由 CA 签署设备证书（有效期 1 年）
 openssl x509 -req -in $DEVICE_CSR -CA $CA_CRT -CAkey $CA_KEY -CAcreateserial -days 365 -out $DEVICE_CRT
